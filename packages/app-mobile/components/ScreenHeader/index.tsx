@@ -169,7 +169,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			},
 			saveButtonIcon: {
 				...theme.icon,
-				fontSize: 25,
+				fontSize: 32,
 				color: theme.colorBright2,
 			},
 			contextMenuTrigger: {
@@ -198,7 +198,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				paddingBottom: PADDING_V,
 			},
 			viewToggleIcon: {
-				fontSize: 27,
+				fontSize: 32,
 				color: theme.colorBright2,
 				flex: 1,
 				textAlignVertical: 'center',
@@ -206,7 +206,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		};
 
 
-		const topIcon: TextStyle = { ...theme.icon, flex: 1, textAlignVertical: 'center', color: theme.colorBright2 };
+		const topIcon: TextStyle = { ...{ ...theme.icon, fontSize: 32 }, flex: 1, textAlignVertical: 'center', color: theme.colorBright2 };
 		styleObject.topIcon = topIcon;
 
 		styleObject.backButton = { ...styleObject.iconButton };

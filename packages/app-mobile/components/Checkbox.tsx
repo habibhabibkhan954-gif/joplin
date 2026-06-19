@@ -22,8 +22,8 @@ const useStyles = (baseStyles: TextStyle|undefined, iconStyle: TextStyle|undefin
 				alignItems: 'center',
 			},
 			icon: {
-				fontSize: 20,
-				height: 22,
+				fontSize: 30,
+				height: 32,
 				color: baseStyles?.color,
 				...iconStyle,
 			},

@@ -146,10 +146,10 @@ type ThemeAndDerivedColors = ReturnType<typeof withDerivedColors>;
 export function extraStyles(theme: ThemeAndDerivedColors) {
 	const zoomRatio = 1;
 
-	const baseFontSize = Math.round(12 * zoomRatio);
+	const baseFontSize = Math.round(14 * zoomRatio);
 	const fontSizes = {
 		fontSize: baseFontSize,
-		toolbarIconSize: 18,
+		toolbarIconSize: 24,
 		noteViewerFontSize: Math.round(baseFontSize * 1.25),
 	};
 

@@ -64,7 +64,7 @@ const useStyles = (themeId: number) => {
 			flex: 1,
 			flexDirection: 'row',
 			flexBasis: 'auto',
-			height: 36,
+			height: 48,
 			alignItems: 'center',
 			paddingLeft: theme.marginLeft,
 			paddingRight: theme.marginRight,
@@ -196,7 +196,7 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 				flex: 1,
 				flexDirection: 'row',
 				flexBasis: 'auto',
-				height: 36,
+				height: 48,
 				alignItems: 'center',
 				paddingRight: theme.marginRight,
 
