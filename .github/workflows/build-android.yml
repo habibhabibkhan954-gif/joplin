@@ -48,7 +48,10 @@ jobs:
 
       - name: Install
         run:  yarn install
-        env:
+        env:    - name: Install Dependencies
+      run: yarn install
+      env:
+        YARN_ENABLE_SCRIPTS: true
           SKIP_ONENOTE_CONVERTER_BUILD: 1
 
       - name: Assemble Android Release
