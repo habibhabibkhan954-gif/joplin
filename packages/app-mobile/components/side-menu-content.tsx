@@ -5,8 +5,6 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import Icon from './Icon';
 import Folder from '@joplin/lib/models/Folder';
-import Note from '@joplin/lib/models/Note';
-import Synchronizer, { type ProgressReport } from '@joplin/lib/Synchronizer';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from './global-style';
@@ -96,6 +94,15 @@ const useStyles = (themeId: number) => {
 			...buttonStyle,
 			flex: 0,
 		};
+		const bottomRowButtonStyle: ViewStyle = {
+			...buttonStyle,
+			flexDirection: 'column',
+			height: 70,
+			width: 70,
+			paddingLeft: 0,
+			paddingRight: 0,
+			justifyContent: 'center',
+		};
 		const folderButtonTextStyle: ViewStyle = {
 			...buttonTextStyle,
 			paddingLeft: 0,
@@ -133,6 +140,13 @@ const useStyles = (themeId: number) => {
 			},
 			sideButtonText: {
 				...buttonTextStyle,
+			},
+			bottomRowButton: bottomRowButtonStyle,
+			bottomRowButtonText: {
+				...buttonTextStyle,
+				paddingLeft: 0,
+				fontSize: theme.fontSizeSmaller,
+				textAlign: 'center',
 			},
 			folderBaseIcon: {
 				...sidebarIconStyle,
@@ -650,6 +664,15 @@ const SideMenuContentComponent = (props: Props) => {
 		return <View role='separator' style={{ marginTop: 15, marginBottom: 15, flex: -1, borderBottomWidth: 1, borderBottomColor: theme.dividerColor }} key={key}></View>;
 	};
 
+	const renderBottomRowButton = (key: string, title: string, iconName: string, onPress: ()=> void) => {
+		return (
+			<TouchableOpacity key={key} onPress={onPress} accessibilityRole='button' style={styles_.bottomRowButton}>
+				<Icon name={`ionicon ${iconName}`} style={styles_.sidebarIcon} accessibilityLabel={null} />
+				<Text style={styles_.bottomRowButtonText} numberOfLines={1}>{title}</Text>
+			</TouchableOpacity>
+		);
+	};
+
 	const renderBottomPanel = () => {
 		const theme = themeStyle(props.themeId);
 
@@ -657,15 +680,19 @@ const SideMenuContentComponent = (props: Props) => {
 
 		items.push(makeDivider('divider_1'));
 
-		items.push(renderSidebarButton('newFolder_button', _('New Notebook'), 'folder-open', { onPress: newFolderButton_press }));
-
-		items.push(renderSidebarButton('tag_button', _('Tags'), 'pricetag', { onPress: tagButton_press }));
-
+		const bottomRowItems = [];
+		bottomRowItems.push(renderBottomRowButton('newFolder_button', _('New'), 'folder-open', newFolderButton_press));
+		bottomRowItems.push(renderBottomRowButton('tag_button', _('Tags'), 'pricetag', tagButton_press));
 		if (props.profileConfig && props.profileConfig.profiles.length > 1) {
-			items.push(renderSidebarButton('switchProfile_button', _('Switch profile'), 'people-circle-outline', { onPress: switchProfileButton_press }));
+			bottomRowItems.push(renderBottomRowButton('switchProfile_button', _('Profile'), 'people-circle-outline', switchProfileButton_press));
 		}
+		bottomRowItems.push(renderBottomRowButton('config_button', _('Config'), 'settings', configButton_press));
 
-		items.push(renderSidebarButton('config_button', _('Configuration'), 'settings', { onPress: configButton_press }));
+		items.push(
+			<View key="bottom_row" style={{ flexDirection: 'row', justifyContent: 'space-around', paddingBottom: 10 }}>
+				{bottomRowItems}
+			</View>
+		);
 
 		items.push(makeDivider('divider_2'));
 
