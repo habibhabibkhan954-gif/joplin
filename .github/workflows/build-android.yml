@@ -55,10 +55,7 @@ jobs:
       
             - name: Assemble Android Release
         run: |
-          cd packages/app-mobile/android
-          chmod +x gradlew
-          sed -i -- 's/signingConfig signingConfigs.release/signingConfig signingConfigs.debug/' app/build.gradle
-          ./gradlew assembleRelease
+          
       - name: Verify alignment
         run: |
           cd packages/app-mobile/android/app
