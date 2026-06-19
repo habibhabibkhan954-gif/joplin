@@ -28,6 +28,7 @@ import time from '@joplin/lib/time';
 import Checkbox from '../../Checkbox';
 import { _, currentLocale } from '@joplin/lib/locale';
 import { reg } from '@joplin/lib/registry';
+const { isImageMimeType } = require("@joplin/lib/resourceUtils");
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { BaseScreenComponent } from '../../base-screen';
 import { themeStyle, editorFont } from '../../global-style';
@@ -333,6 +334,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
 		this.properties_onPress = this.properties_onPress.bind(this);
 		this.revealInNotebook_onPress = this.revealInNotebook_onPress.bind(this);
+		this.archiveNote_onPress = this.archiveNote_onPress.bind(this);
+		this.offloadPhotoWithText_onPress = this.offloadPhotoWithText_onPress.bind(this);
 		this.showOnMap_onPress = this.showOnMap_onPress.bind(this);
 		this.onMarkForDownload = this.onMarkForDownload.bind(this);
 		this.sideMenuOptions = this.sideMenuOptions.bind(this);
@@ -1162,6 +1165,40 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		}
 	}
 
+	private async archiveNote_onPress() {
+		const archiveFolderTitle = _('Archive');
+		let archiveFolder = await Folder.loadByTitleAndParent(archiveFolderTitle, '');
+		if (!archiveFolder) {
+			archiveFolder = await Folder.save({ title: archiveFolderTitle });
+		}
+
+		await Note.moveToFolder(this.state.note.id, archiveFolder.id);
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Notes',
+			folderId: archiveFolder.id,
+		});
+	}
+
+	private async offloadPhotoWithText_onPress() {
+		const note = this.state.note;
+		const shareText = `${note.title}
+
+${note.body}`;
+
+		const resourceIds = await Note.linkedResourceIds(note.body);
+		for (const id of resourceIds) {
+			const resource = await Resource.load(id);
+			if (resource && isImageMimeType(resource.mime)) {
+				const filePath = Resource.fullPath(resource);
+				await shareFile(filePath, resource.mime, shareText);
+				return;
+			}
+		}
+
+		await this.share_onPress();
+	}
+
 	public async onAlarmDialogAccept(date: Date) {
 		if (Platform.OS === 'android') {
 			const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
@@ -1410,6 +1447,22 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				},
 			});
 		}
+
+		output.push({
+			title: _('Archive'),
+			onPress: () => {
+				void this.archiveNote_onPress();
+			},
+			disabled: readOnly || isDeleted,
+		});
+
+		output.push({
+			title: _('Offload photo with text'),
+			onPress: () => {
+				void this.offloadPhotoWithText_onPress();
+			},
+			disabled: readOnly || isDeleted,
+		});
 
 		output.push({
 			title: _('Reveal in notebook'),

@@ -40,7 +40,16 @@ Fingerprint and Face ID are already enabled in the code! To use it:
 3.  Look for the **Security** section.
 4.  Enable **Biometrics authentication**.
 
-## 4. Building your APK
+## 4. New Features: Archive & Offload
+
+### Archive Notes and Notebooks
+- **Notes:** Long-press or use the menu in a note to select **Archive**. This moves the note to a special "Archive" notebook.
+- **Notebooks:** Long-press a notebook in the sidebar and select **Archive**. This moves all notes and sub-notebooks within it to the "Archive" notebook.
+
+### Offload Photo with Text
+- In a note with an image, open the menu and select **Offload photo with text**. This will share both the note's text content and the first attached image together (e.g., to email or another app).
+
+## 5. Building your APK
 
 Your GitHub Action is now fixed. Every time you push your changes to GitHub, it will automatically:
 1.  Build all the required libraries.

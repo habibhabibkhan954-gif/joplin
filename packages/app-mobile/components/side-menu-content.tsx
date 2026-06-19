@@ -5,6 +5,7 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import Icon from './Icon';
 import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
 import Synchronizer, { type ProgressReport } from '@joplin/lib/Synchronizer';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
@@ -438,6 +439,36 @@ const SideMenuContentComponent = (props: Props) => {
 						type: 'NAV_GO',
 						routeName: 'Folder',
 						folderId: folder.id,
+					});
+				},
+			});
+
+			menuItems.push({
+				text: _('Archive'),
+				onPress: async () => {
+					const archiveFolderTitle = _('Archive');
+					let archiveFolder = await Folder.loadByTitleAndParent(archiveFolderTitle, '');
+					if (!archiveFolder) {
+						archiveFolder = await Folder.save({ title: archiveFolderTitle });
+					}
+
+					if (folder.id === archiveFolder.id) return;
+
+					const noteIds = await Folder.noteIds(folder.id);
+					for (const noteId of noteIds) {
+						await Note.moveToFolder(noteId, archiveFolder.id);
+					}
+
+					const subFolderIds = await Folder.subFolderIds(folder.id);
+					for (const subFolderId of subFolderIds) {
+						await Folder.moveToFolder(subFolderId, archiveFolder.id);
+					}
+
+					props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+					props.dispatch({
+						type: 'NAV_GO',
+						routeName: 'Notes',
+						folderId: archiveFolder.id,
 					});
 				},
 			});

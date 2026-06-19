@@ -34,7 +34,7 @@ jobs:
           SKIP_ONENOTE_CONVERTER_BUILD: 1
 
       - name: Build dependencies
-        run: yarn workspace @joplin/lib run build
+        run: yarn workspace @joplin/lib run tsc
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
