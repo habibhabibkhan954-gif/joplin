@@ -78,9 +78,9 @@ const useStyles = (themeId: number) => {
 			fontSize: theme.fontSize,
 		};
 		const sidebarIconStyle: TextStyle = {
-			fontSize: 22,
+			fontSize: 28,
 			color: theme.color,
-			width: 26,
+			width: 32,
 			textAlign: 'center',
 			textAlignVertical: 'center',
 		};
@@ -453,16 +453,7 @@ const SideMenuContentComponent = (props: Props) => {
 					}
 
 					if (folder.id === archiveFolder.id) return;
-
-					const noteIds = await Folder.noteIds(folder.id);
-					for (const noteId of noteIds) {
-						await Note.moveToFolder(noteId, archiveFolder.id);
-					}
-
-					const subFolderIds = await Folder.subFolderIds(folder.id);
-					for (const subFolderId of subFolderIds) {
-						await Folder.moveToFolder(subFolderId, archiveFolder.id);
-					}
+					await Folder.moveToFolder(folder.id, archiveFolder.id);
 
 					props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 					props.dispatch({

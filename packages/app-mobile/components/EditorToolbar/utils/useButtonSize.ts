@@ -8,8 +8,8 @@ const useButtonSize = () => {
 		return {
 			// Scaling the button width/height by the device font scale causes the button to scale
 			// with the user's device font size.
-			buttonSize: 48 * fontScale,
-			iconSize: 22 * fontScale,
+			buttonSize: 56 * fontScale,
+			iconSize: 28 * fontScale,
 		};
 	}, [fontScale]);
 };

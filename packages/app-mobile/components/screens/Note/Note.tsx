@@ -11,6 +11,7 @@ import * as React from 'react';
 import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
+import { isImageMimeType } from '@joplin/lib/resourceUtils';
 import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Resource from '@joplin/lib/models/Resource';
@@ -28,7 +29,6 @@ import time from '@joplin/lib/time';
 import Checkbox from '../../Checkbox';
 import { _, currentLocale } from '@joplin/lib/locale';
 import { reg } from '@joplin/lib/registry';
-const { isImageMimeType } = require("@joplin/lib/resourceUtils");
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { BaseScreenComponent } from '../../base-screen';
 import { themeStyle, editorFont } from '../../global-style';
@@ -1339,6 +1339,16 @@ ${note.body}`;
 		let canAttachPicture = true;
 		if (Platform.OS === 'android' && Platform.Version < 21) canAttachPicture = false;
 		if (canAttachPicture) {
+		output.push({
+			title: _('Fingerprint Setup'),
+			onPress: () => {
+				this.props.dispatch({
+					type: 'NAV_GO',
+					routeName: 'Config',
+				});
+			},
+		});
+
 			output.push({
 				title: _('Attach...'),
 				onPress: () => this.onAttach(),
