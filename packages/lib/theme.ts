@@ -44,7 +44,7 @@ const globalStyle = (() => {
 		disabledOpacity: 0.3,
 		buttonMinWidth: 50,
 		buttonMinHeight: 30,
-		editorFontSize: 12,
+		editorFontSize: 16,
 		textAreaLineHeight: 17,
 		lineHeight: '1.6em',
 		headerButtonHPadding: 6,
@@ -62,7 +62,7 @@ const globalStyle = (() => {
 		marginTop: margin,
 		marginBottom: margin,
 
-		icon: { fontSize: 30 },
+		icon: { fontSize: 40 },
 		lineInput: {
 			fontFamily,
 			maxHeight: 22,
