@@ -2,9 +2,7 @@ name: BUILD APK NEW Automatic
 
 on:
   push:
-    branches: [ "main", "dev" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ "dev", "main" ]
   workflow_dispatch:
 
 jobs:
@@ -14,22 +12,20 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0  # Get full history for submodules
 
-    - name: Verify gradlew exists
+    - name: Restore missing gradlew file
       run: |
-        echo "Checking if gradlew exists..."
-        if [ ! -f "packages/app-android/gradlew" ]; then
-          echo "❌ gradlew not found! Creating it..."
-          cd packages/app-android
-          # Download gradle wrapper if missing
-          gradle wrapper --gradle-version 7.6
-          cd ../..
-        else
-          echo "✅ gradlew found!"
+        cd packages/app-android
+        if [ ! -f "gradlew" ]; then
+          echo "gradlew is missing! Downloading it automatically..."
+          curl -sLO https://raw.githubusercontent.com/laurent22/joplin/dev/packages/app-android/gradlew
+          curl -sLO https://raw.githubusercontent.com/laurent22/joplin/dev/packages/app-android/gradlew.bat
+          mkdir -p gradle/wrapper
+          curl -sLo gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/laurent22/joplin/dev/packages/app-android/gradle/wrapper/gradle-wrapper.jar
+          curl -sLo gradle/wrapper/gradle-wrapper.properties https://raw.githubusercontent.com/laurent22/joplin/dev/packages/app-android/gradle/wrapper/gradle-wrapper.properties
         fi
-        ls -la packages/app-android/gradlew
+        chmod +x gradlew
+        ls -la
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
@@ -47,9 +43,6 @@ jobs:
 
     - name: Install Dependencies
       run: yarn install
-
-    - name: Make gradlew executable
-      run: chmod +x packages/app-android/gradlew
 
     - name: Build Android APK
       working-directory: packages/app-android
