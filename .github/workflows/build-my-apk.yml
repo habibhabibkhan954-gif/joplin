@@ -1,34 +1,39 @@
-name: Build My Android APK
-on: [push, pull_request]
+name: BUILD APK NEW Automatic
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
-  BuildAPK:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
 
-      - name: Install Yarn
-        run: corepack enable
+    - name: Install Yarn
+      run: npm install -g yarn
 
-      - name: Install Dependencies
-        run: yarn install
-        env:
-          YARN_ENABLE_SCRIPTS: true
+    - name: Install Dependencies
+      run: yarn install
 
-      - name: Build Android Release
-        run: |
-          cd packages/app-mobile/android
-          chmod +x gradlew
-          ./gradlew assembleRelease
+    - name: Build Android APK
+      working-directory: packages/app-android
+      run: |
+        chmod +x ./gradlew
+        ./gradlew assembleRelease
