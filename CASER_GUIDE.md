@@ -1,6 +1,6 @@
-# Caser Keep Note - Customization Guide
+# ceaser notebook - Customization Guide
 
-This guide explains how to continue the customization of your app, "caser keep note".
+This guide explains how to continue the customization of your app, "ceaser notebook".
 
 ## 1. How to add more Themes (Reach 40 Themes)
 

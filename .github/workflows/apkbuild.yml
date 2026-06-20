@@ -47,9 +47,13 @@ jobs:
       - name: Install dependencies
         run: yarn install
         env:
-          SKIP_ONENOTE_CONVERTER_BUILD: 1
+          YARN_ENABLE_SCRIPTS: "0"
           HUSKY: 0
-          BUILD_SEQUENCIAL: 1
+          NODE_OPTIONS: "--max-old-space-size=4096"
+
+      - name: Build workspace dependencies
+        run: yarn buildSequential
+        env:
           NODE_OPTIONS: "--max-old-space-size=4096"
 
       - name: Setup Gradle
